@@ -190,14 +190,26 @@ public class FHmapSC<K,V>
     public boolean containsKey(K key) {
         /*
         Steps:
-        1. Get hash value
-        2. Request HashEntries (ArrayList) from the table at that position
-        3. Check if that position contains data (not null)
+        1. Get hash value.
+        2. Request HashEntries (ArrayList) from the table at that position.
+        3. Return false if that position does not contain data (null).
+        4. Iterate through ArrayList HashEntries.
+        5. Return true if one of the key matches.
+        6. Return false if the key was not found after iterating through the HashEntries.
          */
 
         int hash = myHash(key);
 
-        return table[hash] != null;
+        if (table[hash] == null)
+            return false;
+
+        ArrayList<HashEntry<K, V>> hashEntries = table[hash].getDataEntries();
+
+        for (HashEntry<K, V> hashEntry : hashEntries)
+            if (hashEntry.getKey().equals(key))
+                return true;
+
+        return false;
     }
 
     /*
